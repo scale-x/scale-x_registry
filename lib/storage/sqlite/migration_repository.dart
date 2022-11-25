@@ -21,7 +21,7 @@ class MigrationRepository {
     _db
       ..execute(migration.value)
       ..execute("""
-        INSERT INTO migrations (migration) VALUES(?);
+        INSERT INTO migrations (migration) VALUES (?);
       """, [migration.key]);
   }
 }
