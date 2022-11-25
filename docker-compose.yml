@@ -1,0 +1,104 @@
+version: "3"
+
+services:
+  quizdb:
+    image: postgres:12-alpine
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${DATABASE_QUIZ_USER}
+      - POSTGRES_PASSWORD=${DATABASE_QUIZ_PASSWORD}
+      - POSTGRES_DB=${DATABASE_QUIZ_DB}
+    expose:
+      - 5432
+    volumes:
+      - teachme-quizdb:/var/lib/postgresql/data/
+    command: ["postgres", "-c", "log_statement=all"]
+    restart: unless-stopped
+
+  authdb:
+    image: postgres:12-alpine
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${DATABASE_AUTH_USER}
+      - POSTGRES_PASSWORD=${DATABASE_AUTH_PASSWORD}
+      - POSTGRES_DB=${DATABASE_AUTH_DB}
+    expose:
+      - 5432
+    volumes:
+      - teachme-authdb:/var/lib/postgresql/data/
+    command: ["postgres", "-c", "log_statement=all"]
+    restart: unless-stopped
+
+  analyzedb:
+    image: postgres:12-alpine
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${DATABASE_ANALYZE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_ANALYZE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_ANALYZE_DB}
+    expose:
+      - 5432
+    volumes:
+      - teachme-analyzedb:/var/lib/postgresql/data/
+    command: ["postgres", "-c", "log_statement=all"]
+    restart: unless-stopped
+
+  graphql:
+    image: hasura/graphql-engine:v2.11.2
+    expose:
+      - 8080
+    restart: unless-stopped
+    environment:
+      ## enable the console served by server
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
+      ## enable debugging mode. It is recommended to disable this in production
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      ## uncomment next line to set an admin secret
+      # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+    env_file:
+      - .env
+    depends_on:
+      - authdb
+      - analyzedb
+      - quizdb
+
+  proxy:
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - 80:80
+    depends_on:
+      - qrpahql
+
+  auth:
+    build:
+      context: ./auth
+      dockerfile: Dockerfile
+      args:
+        - USER_ID
+        - USER_NAME
+        - GROUP_ID
+        - GROUP_NAME
+        - PROJECT_DIR
+        - HOME_DIR
+    env_file:
+      - .env
+    restart: unless-stopped
+    expose:
+      - 8080
+    volumes:
+      - ./auth:${PWD}/auth
+    command: dart run --enable-vm-service bin/server.dart
+    depends_on:
+      - graphql
+
+volumes:
+  teachme-quizdb:
+  teachme-authdb:
+  teachme-analyzedb:
