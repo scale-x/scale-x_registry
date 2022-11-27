@@ -31,5 +31,5 @@ void main() async {
         expect(lastMigrationNr, 1);
       });
     });
-  }, tags: ['sqlite', 'integration']);
+  }, tags: ['integration']);
 }

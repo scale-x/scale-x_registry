@@ -77,5 +77,20 @@ void main() async {
             throwsA(isA<StorageException>()));
       });
     });
-  }, tags: ['integrations', 'sqlite']);
+
+    group("getById", () {
+      test("remove entity successful", () async {
+        final package =
+            await repository.create(name: "getById", ownerId: owner.id);
+        await repository.delete(package.id);
+        expect(() async => await repository.getById(owner.id),
+            throwsA(isA<StorageException>()));
+      });
+
+      test("throws an exception if no entity exists", () async {
+        expect(() async => await repository.delete(1000),
+            throwsA(isA<StorageException>()));
+      });
+    });
+  }, tags: ['integration']);
 }

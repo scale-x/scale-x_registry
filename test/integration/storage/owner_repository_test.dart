@@ -62,5 +62,5 @@ void main() async {
             throwsA(isA<StorageException>()));
       });
     });
-  }, tags: ['sqlite']);
+  }, tags: ['integration']);
 }
