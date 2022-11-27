@@ -19,12 +19,12 @@ void main() async {
     });
 
     group('getLast', () {
-      test('return 0 if no database migration given', () async {
+      test('returns 0 if no database migration given', () async {
         final lastMigrationNr = await repository.getLast();
         expect(lastMigrationNr, 0);
       });
 
-      test('return 1 after first migration', () async {
+      test('returns 1 after first migration', () async {
         final initMigration = migrations.first;
         await repository.execute(initMigration);
         final lastMigrationNr = await repository.getLast();

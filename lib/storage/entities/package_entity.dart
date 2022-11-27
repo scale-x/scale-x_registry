@@ -1,7 +1,7 @@
 class PackageEntity {
   int id;
+  int ownerId;
   String name;
-  String mail;
 
-  PackageEntity({required this.id, required this.name, required this.mail});
+  PackageEntity({required this.id, required this.name, required this.ownerId});
 }

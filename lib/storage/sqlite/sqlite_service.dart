@@ -24,7 +24,7 @@ class SqliteService implements StorageService {
         .reduce((value, nr) => value > nr ? value : nr);
     if (lastAvailableMigration > lastExecutedMigration) {
       final restMigrations = migrations
-          .where((migration) => migration.key > lastAvailableMigration);
+          .where((migration) => migration.key > lastExecutedMigration);
       for (final migration in restMigrations) {
         await _repository.execute(migration);
       }

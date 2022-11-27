@@ -1,6 +1,6 @@
 class OwnerEntity {
   int id;
-  String mail;
+  String email;
 
-  OwnerEntity({required this.id, required this.mail});
+  OwnerEntity({required this.id, required this.email});
 }

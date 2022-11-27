@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:scale_x_registry/config/config_exception.dart';
+import 'package:scale_x_registry/exceptions/config_exception.dart';
 
 class ConfigParam {
   final dynamic config;
