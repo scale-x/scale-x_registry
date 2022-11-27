@@ -23,5 +23,5 @@ void main() async {
       final lastMigration = await repository.getLast();
       expect(lastMigration > 0, true);
     });
-  }, tags: ['integration']);
+  }, tags: ['sqlite']);
 }

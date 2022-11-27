@@ -1,5 +1,6 @@
 import 'package:scale_x_registry/exceptions/storage_exception.dart';
 import 'package:scale_x_registry/storage/entities/owner_entity.dart';
+import 'package:scale_x_registry/storage/interfaces/package_repository.dart';
 import 'package:scale_x_registry/storage/sqlite/migration_repository.dart';
 import 'package:scale_x_registry/storage/sqlite/owner_repository.dart';
 import 'package:scale_x_registry/storage/sqlite/package_repository.dart';
@@ -12,7 +13,7 @@ void main() async {
   group("PackageRepository", () {
     late Database db;
     late OwnerEntity owner;
-    late PackageRepositoryImpl repository;
+    late PackageRepository repository;
     setUp(() async {
       db = sqlite3.openInMemory();
       final migrationRepository = MigrationRepository(db);

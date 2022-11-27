@@ -1,4 +1,5 @@
 import 'package:scale_x_registry/exceptions/storage_exception.dart';
+import 'package:scale_x_registry/storage/interfaces/owner_repository.dart';
 import 'package:scale_x_registry/storage/sqlite/migration_repository.dart';
 import 'package:scale_x_registry/storage/sqlite/owner_repository.dart';
 import 'package:scale_x_registry/storage/sqlite/sqlite_service.dart';
@@ -8,7 +9,7 @@ import 'package:test/test.dart';
 void main() async {
   group("OwnerRepositoryImp", () {
     late Database db;
-    late OwnerRepositoryImpl repository;
+    late OwnerRepository repository;
     setUpAll(() async {
       db = sqlite3.openInMemory();
       final migrationRepository = MigrationRepository(db);
