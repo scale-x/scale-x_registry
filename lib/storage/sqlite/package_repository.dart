@@ -10,13 +10,18 @@ class PackageRepositoryImpl implements PackageRepository {
 
   @override
   Future<PackageEntity> create(
-      {required String name, required int ownerId}) async {
+      {String namespace = "common",
+      required String name,
+      required int ownerId}) async {
     try {
       db.execute("""
-        INSERT INTO packages (name, owner_id) VALUES (?, ?)
-      """, [name, ownerId]);
+        INSERT INTO packages (namespace, name, owner_id) VALUES (?, ?, ?)
+      """, [namespace, name, ownerId]);
       return PackageEntity(
-          id: db.lastInsertRowId, name: name, ownerId: ownerId);
+          id: db.lastInsertRowId,
+          namespace: namespace,
+          name: name,
+          ownerId: ownerId);
     } catch (e) {
       throw StorageException(
           "Cant not create package entity: name - $name, ownerId - $ownerId (${e.toString()})");
@@ -24,14 +29,38 @@ class PackageRepositoryImpl implements PackageRepository {
   }
 
   @override
-  Future<void> delete() {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<void> delete(int id) async {
+    try {
+      db.execute("""
+        DELETE FROM packages WHERE id = ? LIMIT 1
+      """, [id]);
+      final result = db.select("""
+        SELECT changes() as deleted;
+      """);
+      if (result.first["deleted"] != 1) {
+        throw StorageException("package entity was not deleted");
+      }
+    } catch (e) {
+      throw StorageException(
+          "Cant not delete package: id - $id (${e.toString()})");
+    }
   }
 
   @override
-  Future<PackageEntity> getById(int id) {
-    // TODO: implement getById
-    throw UnimplementedError();
+  Future<PackageEntity> getById(int id) async {
+    try {
+      final result = db.select("""
+        SELECT id, owner_id, namespace, name FROM owners WHERE id = ?
+      """, [id]);
+      final row = result.first;
+      return PackageEntity(
+          id: row['id'],
+          ownerId: row['owner_id'],
+          name: row['name'],
+          namespace: row['namespace']);
+    } catch (e) {
+      throw StorageException(
+          "Cant not select owner entity: id - $id (${e.toString()})");
+    }
   }
 }

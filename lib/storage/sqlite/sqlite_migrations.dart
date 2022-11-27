@@ -21,8 +21,10 @@ const _migration002 = """
 const _migration003 = """
   CREATE TABLE packages (
     id INTEGER PRIMARY KEY,
-    name TEXT NOT NULL UNIQUE,
+    namespace TEXT NOT NULL,
+    name TEXT NOT NULL,
     owner_id INTEGER NOT NULL,
+    UNIQUE(namespace, name),
     FOREIGN KEY(owner_id) REFERENCES owners(id)
   ); 
 """;

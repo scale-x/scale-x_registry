@@ -28,11 +28,21 @@ void main() async {
     });
 
     group('create', () {
-      test("creates an entity successful", () async {
+      test("creates an entity successful with empty namespace", () async {
         final package =
             await repository.create(name: "test", ownerId: owner.id);
         expect(package.id > 0, true);
+        expect(package.namespace, "common");
         expect(package.name, "test");
+        expect(package.ownerId, owner.id);
+      });
+
+      test("creates an entity with namespace", () async {
+        final package = await repository.create(
+            name: "test2", ownerId: owner.id, namespace: "custom");
+        expect(package.id > 0, true);
+        expect(package.namespace, "custom");
+        expect(package.name, "test2");
         expect(package.ownerId, owner.id);
       });
 
@@ -41,6 +51,29 @@ void main() async {
         expect(
             () async =>
                 await repository.create(name: "test1", ownerId: owner.id),
+            throwsA(isA<StorageException>()));
+      });
+
+      test('throws an exception on duplicate name with namespace', () async {
+        await repository.create(
+            name: "test3", namespace: "custom", ownerId: owner.id);
+        expect(
+            () async => await repository.create(
+                name: "test3", namespace: "custom", ownerId: owner.id),
+            throwsA(isA<StorageException>()));
+      });
+    });
+
+    group("delete", () {
+      test("remove entity successful", () async {
+        final package =
+            await repository.create(name: "delete1", ownerId: owner.id);
+        await repository.delete(package.id);
+        expect(() async => await repository.getById(package.id),
+            throwsA(isA<StorageException>()));
+      });
+      test("throws an exception if no entity exists", () async {
+        expect(() async => await repository.delete(1000),
             throwsA(isA<StorageException>()));
       });
     });
