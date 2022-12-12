@@ -9,6 +9,22 @@ void main() {
       expect(configEntity.sqlite?.name, 'Scalex.db');
     });
 
+    test('returns in memory true if it set', () {
+      final configEntity = ConfigEntity.init({
+        "sqlite": {"in_memory": true}
+      }, null);
+      expect(configEntity.sqlite?.inMemory, true);
+    });
+
+    test("if in memory set to true all other params are null in any way", () {
+      final configEntity = ConfigEntity.init({
+        "sqlite": {"in_memory": true, "name": "Sqlite.db", "path": "test/db"}
+      }, null);
+      expect(configEntity.sqlite?.inMemory, true);
+      expect(configEntity.sqlite?.name, null);
+      expect(configEntity.sqlite?.path, null);
+    });
+
     test('returns config value if given', () {
       final configEntity = ConfigEntity.init({
         "sqlite": {"name": "test_name", "path": "test_path"}
