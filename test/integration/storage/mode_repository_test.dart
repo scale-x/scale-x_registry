@@ -11,6 +11,7 @@ void main() async {
     late StorageFactory storageFactory;
     late PackageEntity packageEntity;
     late ModeRepository modeRepository;
+
     setUpAll(() async {
       storageFactory = getStorageFactory();
       await storageFactory.start();

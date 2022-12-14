@@ -4,9 +4,9 @@ import 'package:scale_x_registry/storage/interfaces/package_repository.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 class PackageRepositoryImpl implements PackageRepository {
-  Database db;
+  Database _db;
 
-  PackageRepositoryImpl(this.db);
+  PackageRepositoryImpl(this._db);
 
   @override
   Future<PackageEntity> create(
@@ -14,11 +14,11 @@ class PackageRepositoryImpl implements PackageRepository {
       required String name,
       required int ownerId}) async {
     try {
-      db.execute("""
+      _db.execute("""
         INSERT INTO packages (namespace, name, owner_id) VALUES (?, ?, ?)
       """, [namespace, name, ownerId]);
       return PackageEntity(
-          id: db.lastInsertRowId,
+          id: _db.lastInsertRowId,
           namespace: namespace,
           name: name,
           ownerId: ownerId);
@@ -31,10 +31,10 @@ class PackageRepositoryImpl implements PackageRepository {
   @override
   Future<void> delete(int id) async {
     try {
-      db.execute("""
+      _db.execute("""
         DELETE FROM packages WHERE id = ? LIMIT 1
       """, [id]);
-      final result = db.select("""
+      final result = _db.select("""
         SELECT changes() as deleted;
       """);
       if (result.first["deleted"] != 1) {
@@ -49,7 +49,7 @@ class PackageRepositoryImpl implements PackageRepository {
   @override
   Future<PackageEntity> getById(int id) async {
     try {
-      final result = db.select("""
+      final result = _db.select("""
         SELECT id, owner_id, namespace, name FROM owners WHERE id = ?
       """, [id]);
       final row = result.first;

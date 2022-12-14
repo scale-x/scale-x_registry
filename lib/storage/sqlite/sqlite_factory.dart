@@ -5,11 +5,13 @@ import 'package:scale_x_registry/storage/interfaces/mode_repository.dart';
 import 'package:scale_x_registry/storage/interfaces/package_repository.dart';
 import 'package:scale_x_registry/storage/interfaces/owner_repository.dart';
 import 'package:scale_x_registry/storage/interfaces/storage_factory.dart';
+import 'package:scale_x_registry/storage/interfaces/version_repository.dart';
 import 'package:scale_x_registry/storage/sqlite/migration_repository.dart';
 import 'package:scale_x_registry/storage/sqlite/mode_repository.dart';
 import 'package:scale_x_registry/storage/sqlite/owner_repository.dart';
 import 'package:scale_x_registry/storage/sqlite/package_repository.dart';
 import 'package:scale_x_registry/storage/sqlite/sqlite_migrations.dart';
+import 'package:scale_x_registry/storage/sqlite/version_repository.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 class SqliteFactory implements StorageFactory {
@@ -31,6 +33,11 @@ class SqliteFactory implements StorageFactory {
   @override
   ModeRepository getModeRepository() {
     return ModeRepositoryImp(_db);
+  }
+
+  @override
+  VersionRepository getVersionRepository() {
+    return VersionRepositoryImp(_db);
   }
 
   @override

@@ -39,19 +39,23 @@ const _migration004 = """
   );
 """;
 
-// const _migration003 = """
-//   CREATE TABLE files (
-//     id INT PRIMARY KEY,
-//     hash TEXT NOT NULL,
-//     group TEXT NOT NULL,
-//     path TEXT NOT NULL
-//   );
-// """;
+const _migration005 = """
+  CREATE TABLE versions (
+    id INTEGER PRIMARY KEY,
+    package_id INTEGER NOT NULL,
+    major INTEGER NOT NULL,
+    minor INTEGER NOT NULL,
+    path INTEGER NOT NULL,
+    postfix TEXT,
+    UNIQUE (package_id, major, minor, path, postfix),
+    FOREIGN KEY(package_id) REFERENCES packages(id)
+  );
+""";
 
 final List<Migration> migrations = [
   Migration(1, _migration001),
   Migration(2, _migration002),
   Migration(3, _migration003),
-  Migration(3, _migration004),
-  // Migration(4, _migration004)
+  Migration(4, _migration004),
+  Migration(5, _migration005),
 ];
