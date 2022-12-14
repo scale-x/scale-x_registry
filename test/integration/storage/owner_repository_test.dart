@@ -1,25 +1,22 @@
 import 'package:scale_x_registry/exceptions/storage_exception.dart';
 import 'package:scale_x_registry/storage/interfaces/owner_repository.dart';
-import 'package:scale_x_registry/storage/sqlite/migration_repository.dart';
-import 'package:scale_x_registry/storage/sqlite/owner_repository.dart';
-import 'package:scale_x_registry/storage/sqlite/sqlite_service.dart';
-import 'package:sqlite3/sqlite3.dart';
+import 'package:scale_x_registry/storage/interfaces/storage_factory.dart';
 import 'package:test/test.dart';
+
+import 'storage_factory_builder.dart';
 
 void main() async {
   group("OwnerRepositoryImp", () {
-    late Database db;
+    late StorageFactory storageFactory;
     late OwnerRepository repository;
     setUpAll(() async {
-      db = sqlite3.openInMemory();
-      final migrationRepository = MigrationRepository(db);
-      final sqliteService = SqliteService(migrationRepository);
-      await sqliteService.start();
-      repository = OwnerRepositoryImpl(db);
+      storageFactory = getStorageFactory();
+      await storageFactory.start();
+      repository = storageFactory.getOwnerRepository();
     });
 
     tearDownAll(() async {
-      db.dispose();
+      await storageFactory.stop();
     });
 
     group("create", () {
@@ -63,5 +60,5 @@ void main() async {
             throwsA(isA<StorageException>()));
       });
     });
-  }, tags: ['integration']);
+  }, tags: ['integration', 'storage']);
 }

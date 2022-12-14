@@ -1,31 +1,27 @@
 import 'package:scale_x_registry/exceptions/storage_exception.dart';
 import 'package:scale_x_registry/storage/entities/owner_entity.dart';
 import 'package:scale_x_registry/storage/interfaces/package_repository.dart';
-import 'package:scale_x_registry/storage/sqlite/migration_repository.dart';
-import 'package:scale_x_registry/storage/sqlite/owner_repository.dart';
-import 'package:scale_x_registry/storage/sqlite/package_repository.dart';
-import 'package:scale_x_registry/storage/sqlite/sqlite_service.dart';
-import 'package:sqlite3/sqlite3.dart';
+import 'package:scale_x_registry/storage/interfaces/storage_factory.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 
+import 'storage_factory_builder.dart';
+
 void main() async {
   group("PackageRepository", () {
-    late Database db;
+    late StorageFactory storageFactory;
     late OwnerEntity owner;
     late PackageRepository repository;
     setUp(() async {
-      db = sqlite3.openInMemory();
-      final migrationRepository = MigrationRepository(db);
-      final sqliteService = SqliteService(migrationRepository);
-      await sqliteService.start();
-      final ownerRepository = OwnerRepositoryImpl(db);
+      storageFactory = getStorageFactory();
+      await storageFactory.start();
+      repository = storageFactory.getPackageRepository();
+      final ownerRepository = storageFactory.getOwnerRepository();
       owner = await ownerRepository.create(email: "test@mail.com");
-      repository = PackageRepositoryImpl(db);
     });
 
-    tearDown(() {
-      db.dispose();
+    tearDown(() async {
+      await storageFactory.stop();
     });
 
     group('create', () {
@@ -93,5 +89,5 @@ void main() async {
             throwsA(isA<StorageException>()));
       });
     });
-  }, tags: ['integration']);
+  }, tags: ['integration', 'storage']);
 }
