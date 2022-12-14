@@ -31,12 +31,12 @@ void main() async {
       test("new entity", () async {
         final versionEntity = await versionRepository.create(
             packageId: packageEntity.id,
-            major: 0,
+            major: 1,
             minor: 1,
             path: 32,
             postfix: 'alpha');
         expect(versionEntity.packageId, packageEntity.id);
-        expect(versionEntity.major, 0);
+        expect(versionEntity.major, 1);
         expect(versionEntity.minor, 1);
         expect(versionEntity.path, 32);
         expect(versionEntity.postfix, 'alpha');
@@ -45,9 +45,9 @@ void main() async {
 
       test("new entity with empty postfix", () async {
         final versionEntity = await versionRepository.create(
-            packageId: packageEntity.id, major: 0, minor: 1, path: 32);
+            packageId: packageEntity.id, major: 2, minor: 1, path: 32);
         expect(versionEntity.packageId, packageEntity.id);
-        expect(versionEntity.major, 0);
+        expect(versionEntity.major, 2);
         expect(versionEntity.minor, 1);
         expect(versionEntity.path, 32);
         expect(versionEntity.postfix, null);
@@ -56,10 +56,10 @@ void main() async {
 
       test("throws an error on duplicate package and title", () async {
         await versionRepository.create(
-            packageId: packageEntity.id, major: 0, minor: 1, path: 32);
+            packageId: packageEntity.id, major: 3, minor: 1, path: 32);
         expect(
             () async => await versionRepository.create(
-                packageId: packageEntity.id, major: 0, minor: 1, path: 32),
+                packageId: packageEntity.id, major: 3, minor: 1, path: 32),
             throwsA(isA<StorageException>()));
       });
     });
@@ -68,7 +68,7 @@ void main() async {
       test("returns right entity", () async {
         final createdEntity = await versionRepository.create(
             packageId: packageEntity.id,
-            major: 0,
+            major: 4,
             minor: 1,
             path: 32,
             postfix: 'alpha');
@@ -91,7 +91,7 @@ void main() async {
     group("delete", () {
       test("remove entity successful", () async {
         final versionEntity = await versionRepository.create(
-            packageId: packageEntity.id, major: 1, minor: 1, path: 32);
+            packageId: packageEntity.id, major: 5, minor: 1, path: 32);
         await versionRepository.delete(versionEntity.id);
         expect(() async => await versionRepository.getById(versionEntity.id),
             throwsA(isA<StorageException>()));
