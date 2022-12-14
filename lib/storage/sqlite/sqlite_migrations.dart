@@ -29,6 +29,16 @@ const _migration003 = """
   ); 
 """;
 
+const _migration004 = """
+  CREATE TABLE modes (
+    id INTEGER PRIMARY KEY,
+    package_id INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    UNIQUE(package_id, title),
+    FOREIGN KEY(package_id) REFERENCES packages(id)
+  );
+""";
+
 // const _migration003 = """
 //   CREATE TABLE files (
 //     id INT PRIMARY KEY,
@@ -42,5 +52,6 @@ final List<Migration> migrations = [
   Migration(1, _migration001),
   Migration(2, _migration002),
   Migration(3, _migration003),
+  Migration(3, _migration004),
   // Migration(4, _migration004)
 ];

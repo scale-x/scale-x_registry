@@ -26,7 +26,7 @@ void main() async {
         expect(owner.id > 0, true);
       });
 
-      test("throws an error on duplicate error", () async {
+      test("throws an error on duplicate email", () async {
         await repository.create(email: "test1@mail.com");
         expect(() async => await repository.create(email: "test1@mail.com"),
             throwsA(isA<StorageException>()));
