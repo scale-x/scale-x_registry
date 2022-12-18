@@ -46,26 +46,6 @@ services:
     command: ["postgres", "-c", "log_statement=all"]
     restart: unless-stopped
 
-  graphql:
-    image: hasura/graphql-engine:v2.11.2
-    expose:
-      - 8080
-    restart: unless-stopped
-    environment:
-      ## enable the console served by server
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
-      ## enable debugging mode. It is recommended to disable this in production
-      HASURA_GRAPHQL_DEV_MODE: "true"
-      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      ## uncomment next line to set an admin secret
-      # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
-    env_file:
-      - .env
-    depends_on:
-      - authdb
-      - analyzedb
-      - quizdb
-
   proxy:
     build:
       context: ./proxy

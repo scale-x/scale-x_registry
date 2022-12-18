@@ -4,19 +4,19 @@ import 'package:scale_x_registry/storage/interfaces/mode_repository.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 class ModeRepositoryImp implements ModeRepository {
-  Database db;
+  final Database _db;
 
-  ModeRepositoryImp(this.db);
+  ModeRepositoryImp(this._db);
 
   @override
   Future<ModeEntity> create(
       {required int packageId, required String title}) async {
     try {
-      db.execute("""
+      _db.execute("""
         INSERT INTO modes (package_id, title) VALUES (?, ?)
       """, [packageId, title]);
       return ModeEntity(
-          id: db.lastInsertRowId, packageId: packageId, title: title);
+          id: _db.lastInsertRowId, packageId: packageId, title: title);
     } catch (e) {
       throw StorageException(
           "Cant not create mode entity: packageId - $packageId, title $title (${e.toString()})");
@@ -26,10 +26,10 @@ class ModeRepositoryImp implements ModeRepository {
   @override
   Future<void> delete(int id) async {
     try {
-      db.execute("""
+      _db.execute("""
         DELETE FROM modes WHERE id = ? LIMIT 1
       """, [id]);
-      final result = db.select("""
+      final result = _db.select("""
         SELECT changes() as deleted;
       """);
       if (result.first["deleted"] != 1) {
@@ -44,7 +44,7 @@ class ModeRepositoryImp implements ModeRepository {
   @override
   Future<ModeEntity> getById(int id) async {
     try {
-      final result = db.select("""
+      final result = _db.select("""
         SELECT id, package_id, title FROM modes WHERE id = ?
       """, [id]);
       return ModeEntity(

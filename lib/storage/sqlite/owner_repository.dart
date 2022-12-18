@@ -4,17 +4,17 @@ import 'package:scale_x_registry/storage/interfaces/owner_repository.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 class OwnerRepositoryImpl implements OwnerRepository {
-  Database db;
+  final Database _db;
 
-  OwnerRepositoryImpl(this.db);
+  OwnerRepositoryImpl(this._db);
 
   @override
   Future<OwnerEntity> create({required String email}) async {
     try {
-      db.execute("""
+      _db.execute("""
         INSERT INTO owners (email) VALUES (?)
       """, [email]);
-      return OwnerEntity(id: db.lastInsertRowId, email: email);
+      return OwnerEntity(id: _db.lastInsertRowId, email: email);
     } catch (e) {
       throw StorageException(
           "Cant not create owner entity: email - $email (${e.toString()})");
@@ -24,10 +24,10 @@ class OwnerRepositoryImpl implements OwnerRepository {
   @override
   Future<void> delete(int id) async {
     try {
-      db.execute("""
+      _db.execute("""
         DELETE FROM owners WHERE id = ? LIMIT 1
       """, [id]);
-      final result = db.select("""
+      final result = _db.select("""
         SELECT changes() as deleted;
       """);
       if (result.first["deleted"] != 1) {
@@ -42,7 +42,7 @@ class OwnerRepositoryImpl implements OwnerRepository {
   @override
   Future<OwnerEntity> getById(int id) async {
     try {
-      final result = db.select("""
+      final result = _db.select("""
         SELECT id, email FROM owners WHERE id = ?
       """, [id]);
       return OwnerEntity(id: result.first['id'], email: result.first['email']);

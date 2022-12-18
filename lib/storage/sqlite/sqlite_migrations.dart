@@ -52,10 +52,32 @@ const _migration005 = """
   );
 """;
 
+const _migration006 = """
+  CREATE TABLE files (
+    id INTEGER PRIMARY KEY,
+    artifact_type_id INTEGER NOT NULL,
+    hash TEXT NOT NULL,
+    path TEXT NOT NULL,
+    UNIQUE (hash, artifact_type_id)
+  );
+""";
+
+// const _migration007 = """
+//   CREATE TABLE packages_modes_engines_versions_files (
+//     package_id INTEGER NOT NULL,
+//     mode_id INTEGER NOT NULL,
+//     engine_id INTEGER NOT NULL,
+//     version_id INTEGER NOT NULL,
+//     file_id INTEGER NOT NULL,
+//   );
+// """;
+
 final List<Migration> migrations = [
   Migration(1, _migration001),
   Migration(2, _migration002),
   Migration(3, _migration003),
   Migration(4, _migration004),
   Migration(5, _migration005),
+  Migration(6, _migration006),
+  // Migration(7, _migration007),
 ];

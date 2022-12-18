@@ -4,7 +4,7 @@ import 'package:scale_x_registry/storage/interfaces/package_repository.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 class PackageRepositoryImpl implements PackageRepository {
-  Database _db;
+  final Database _db;
 
   PackageRepositoryImpl(this._db);
 

@@ -1,11 +1,13 @@
 import 'package:path/path.dart';
 import 'package:scale_x_registry/config/entities/sqlite_config_entity.dart';
 import 'package:scale_x_registry/exceptions/storage_exception.dart';
+import 'package:scale_x_registry/storage/interfaces/file_repository.dart';
 import 'package:scale_x_registry/storage/interfaces/mode_repository.dart';
 import 'package:scale_x_registry/storage/interfaces/package_repository.dart';
 import 'package:scale_x_registry/storage/interfaces/owner_repository.dart';
 import 'package:scale_x_registry/storage/interfaces/storage_factory.dart';
 import 'package:scale_x_registry/storage/interfaces/version_repository.dart';
+import 'package:scale_x_registry/storage/sqlite/file_repository.dart';
 import 'package:scale_x_registry/storage/sqlite/migration_repository.dart';
 import 'package:scale_x_registry/storage/sqlite/mode_repository.dart';
 import 'package:scale_x_registry/storage/sqlite/owner_repository.dart';
@@ -38,6 +40,11 @@ class SqliteFactory implements StorageFactory {
   @override
   VersionRepository getVersionRepository() {
     return VersionRepositoryImp(_db);
+  }
+
+  @override
+  FileRepository getFileRepository() {
+    return FileRepositoryImp(_db);
   }
 
   @override
