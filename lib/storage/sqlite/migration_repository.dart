@@ -2,7 +2,7 @@ import 'package:scale_x_registry/storage/sqlite/sqlite_migrations.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 class MigrationRepository {
-  Database _db;
+  final Database _db;
 
   MigrationRepository(this._db);
 

@@ -26,8 +26,18 @@
   - versionId
   - title
 
+- engine (line a constant do not has table)
+
+  - id
+  - title
+
 - package_mode_engine_file
 
-- authors
-  - uuid
+  - package_id
+  - mode_id
+  - engine_id
+  - file_id
+
+- owners
+  - id
   - email
