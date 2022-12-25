@@ -1,0 +1,20 @@
+openapi: "3.0.2"
+info:
+  title: Scalex Registry Api
+  version: "1.0"
+  description: |
+
+servers:
+  - url: https://api.server.test/v1
+paths:
+  /test:
+    get:
+      responses:
+        "200":
+          description: OK
+    put:
+      description: ""
+      parameters: []
+      responses:
+        "200":
+          description: OK
