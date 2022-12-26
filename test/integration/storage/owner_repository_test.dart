@@ -47,6 +47,20 @@ void main() async {
       });
     });
 
+    group("getByEmail", () {
+      test("return right entity", () async {
+        final createdOwner = await repository.create(email: "ddd@mail.com");
+        final selectedOwner = await repository.getByEmail("ddd@mail.com");
+        expect(createdOwner.id, selectedOwner.id);
+        expect(createdOwner.email, selectedOwner.email);
+      });
+
+      test("throws an exception if user with email don't exists", () async {
+        expect(() async => await repository.getByEmail("un`existing@mail.com"),
+            throwsA(isA<StorageException>()));
+      });
+    });
+
     group("delete", () {
       test("remove entity successful", () async {
         final owner = await repository.create(email: "delete@mail.com");

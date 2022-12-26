@@ -10,18 +10,15 @@ class PackageRepositoryImpl implements PackageRepository {
 
   @override
   Future<PackageEntity> create(
-      {String namespace = "common",
+      {required String scope,
       required String name,
       required int ownerId}) async {
     try {
       _db.execute("""
-        INSERT INTO packages (namespace, name, owner_id) VALUES (?, ?, ?)
-      """, [namespace, name, ownerId]);
+        INSERT INTO packages (scope, name, owner_id) VALUES (?, ?, ?)
+      """, [scope, name, ownerId]);
       return PackageEntity(
-          id: _db.lastInsertRowId,
-          namespace: namespace,
-          name: name,
-          ownerId: ownerId);
+          id: _db.lastInsertRowId, scope: scope, name: name, ownerId: ownerId);
     } catch (e) {
       throw StorageException(
           "Cant not create package entity: name - $name, ownerId - $ownerId (${e.toString()})");
@@ -50,17 +47,36 @@ class PackageRepositoryImpl implements PackageRepository {
   Future<PackageEntity> getById(int id) async {
     try {
       final result = _db.select("""
-        SELECT id, owner_id, namespace, name FROM owners WHERE id = ?
+        SELECT id, owner_id, scope, name FROM packages WHERE id = ?
       """, [id]);
       final row = result.first;
       return PackageEntity(
           id: row['id'],
           ownerId: row['owner_id'],
           name: row['name'],
-          namespace: row['namespace']);
+          scope: row['scope']);
     } catch (e) {
       throw StorageException(
           "Cant not select owner entity: id - $id (${e.toString()})");
+    }
+  }
+
+  @override
+  Future<PackageEntity> getByScopeAndName(
+      {required String scope, required String name}) async {
+    try {
+      final result = _db.select("""
+        SELECT id, owner_id, scope, name FROM packages WHERE scope = ? AND name = ?
+      """, [scope, name]);
+      final row = result.first;
+      return PackageEntity(
+          id: row['id'],
+          ownerId: row['owner_id'],
+          name: row['name'],
+          scope: row['scope']);
+    } catch (e) {
+      throw StorageException(
+          "Cant not select owner entity: scope - $scope, name - $name (${e.toString()})");
     }
   }
 }

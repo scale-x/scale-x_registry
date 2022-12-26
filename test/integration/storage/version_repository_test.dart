@@ -18,8 +18,8 @@ void main() async {
       final ownerRepository = storageFactory.getOwnerRepository();
       final ownerEntity = await ownerRepository.create(email: "test@mail.com");
       final packageRepository = storageFactory.getPackageRepository();
-      packageEntity =
-          await packageRepository.create(name: 'test', ownerId: ownerEntity.id);
+      packageEntity = await packageRepository.create(
+          scope: 'global', name: 'test', ownerId: ownerEntity.id);
       versionRepository = storageFactory.getVersionRepository();
     });
 

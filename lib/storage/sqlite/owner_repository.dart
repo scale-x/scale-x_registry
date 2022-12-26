@@ -51,4 +51,19 @@ class OwnerRepositoryImpl implements OwnerRepository {
           "Cant not select owner entity: id - $id (${e.toString()})");
     }
   }
+
+  @override
+  Future<OwnerEntity> getByEmail(String email) async {
+    try {
+      final result = _db.select("""
+        SELECT id, email FROM owners WHERE email = ?
+      """, [email]);
+      return OwnerEntity(id: result.first['id'], email: result.first['email']);
+    } catch (e) {
+      throw StorageException(
+          "Cant not select owner entity: email - $email (${e.toString()})");
+    }
+    // TODO: implement getByEmail
+    throw UnimplementedError();
+  }
 }
