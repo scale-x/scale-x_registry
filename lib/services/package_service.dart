@@ -1,4 +1,5 @@
 import 'package:scale_x_registry/services/interfaces/package_service.dart';
+import 'package:scale_x_registry/storage/entities/owner_entity.dart';
 import 'package:scale_x_registry/storage/entities/package_entity.dart';
 import 'package:scale_x_registry/storage/interfaces/owner_repository.dart';
 import 'package:scale_x_registry/storage/interfaces/package_repository.dart';
@@ -14,7 +15,7 @@ class PackageServiceImpl implements PackageService {
       {required String email,
       required String scope,
       required String name}) async {
-    final owner = await _ownerRepository.getByEmail(email);
+    final owner = await _getOwner(email);
     return await _packageRepository.create(
         scope: scope, name: name, ownerId: owner.id);
   }
@@ -23,5 +24,13 @@ class PackageServiceImpl implements PackageService {
   Future<PackageEntity> get(
       {required String scope, required String name}) async {
     return await _packageRepository.getByScopeAndName(scope: scope, name: name);
+  }
+
+  Future<OwnerEntity> _getOwner(String email) async {
+    try {
+      return await _ownerRepository.getByEmail(email);
+    } catch (e) {
+      return await _ownerRepository.create(email: email);
+    }
   }
 }
