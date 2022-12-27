@@ -45,7 +45,7 @@ void main() async {
         expect(package.scope, "global");
       });
 
-      test("trows an error if package already exists", () async {
+      test("throws an error if package already exists", () async {
         await packageService.create(
             email: "ccc@mail.com", scope: "global", name: "ccc-package");
         expect(
