@@ -3,7 +3,7 @@ import 'package:scale_x_registry/storage/interfaces/owner_repository.dart';
 import 'package:scale_x_registry/storage/interfaces/storage_factory.dart';
 import 'package:test/test.dart';
 
-import 'storage_factory_builder.dart';
+import '../storage_factory_builder.dart';
 
 void main() async {
   group("OwnerRepositoryImp", () {

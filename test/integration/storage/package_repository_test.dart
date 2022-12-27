@@ -5,7 +5,7 @@ import 'package:scale_x_registry/storage/interfaces/storage_factory.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 
-import 'storage_factory_builder.dart';
+import '../storage_factory_builder.dart';
 
 void main() async {
   group("PackageRepository", () {

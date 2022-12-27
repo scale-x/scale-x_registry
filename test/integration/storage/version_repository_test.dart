@@ -4,7 +4,7 @@ import 'package:scale_x_registry/storage/interfaces/storage_factory.dart';
 import 'package:scale_x_registry/storage/interfaces/version_repository.dart';
 import 'package:test/test.dart';
 
-import 'storage_factory_builder.dart';
+import '../storage_factory_builder.dart';
 
 void main() async {
   group("VersionRepository", () {
