@@ -9,4 +9,8 @@ class PackageEntity {
       required this.scope,
       required this.name,
       required this.ownerId});
+
+  Map<String, dynamic> toJson() {
+    return {'id': id, 'ownerId': ownerId, 'scope': scope, 'name': name};
+  }
 }
