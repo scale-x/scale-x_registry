@@ -18,7 +18,7 @@ class RestResponse {
   static Response badRequest(dynamic error) {
     final status = HttpStatus.badRequest;
     return Response(status,
-        body: json.encode({'error': error, 'status': status}));
+        body: json.encode({'error': error.toString(), 'status': status}));
   }
 
   static Response notFound(dynamic error) {

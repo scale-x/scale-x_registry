@@ -1,2 +1,3 @@
-sqlite3:
+sqlite:
   in_memory: true
+  port: 3000

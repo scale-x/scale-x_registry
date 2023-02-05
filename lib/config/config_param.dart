@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:scale_x_registry/exceptions/config_exception.dart';
 
 class ConfigParam {
