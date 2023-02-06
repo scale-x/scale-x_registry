@@ -7,19 +7,19 @@ import 'package:test/test.dart';
 import 'test_utils.dart';
 
 void main() {
+  late Process p;
+
+  setUpAll(() async {
+    p = await Process.start(
+      'dart',
+      ['run', 'bin/registry.dart'],
+    );
+    await p.stdout.first;
+  });
+
+  tearDownAll(() => p.kill());
+
   group('Package - Endpoint', () {
-    late Process p;
-
-    setUp(() async {
-      p = await Process.start(
-        'dart',
-        ['run', 'bin/registry.dart'],
-      );
-      await p.stdout.first;
-    });
-
-    tearDown(() => p.kill());
-
     group('/package', () {
       test('GET non existing package', () async {
         final name = generateRandomString(10);
